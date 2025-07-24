@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import random
 from collections import defaultdict, deque
 from collections.abc import Sequence
 from itertools import takewhile
@@ -526,6 +527,8 @@ def _pack_bfd(examples: pa.Table, seq_length: int) -> pa.Table:
         space_to_bin[space].append(bin)
         if space > 0:
             segment_tree.add(space)
+
+    random.shuffle(bins) # shuffle bins to avoid wave-like patterns
 
     examples = pc.take(examples, [id_ for bin in bins for id_ in bin["ids"]])
     offsets = np.array([0] + [bin["length"] for bin in bins])
